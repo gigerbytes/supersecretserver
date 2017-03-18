@@ -2,4 +2,5 @@ html
 	head
 		title SuperSecret
 	body
-		img(src=`${locals.qrImg}`)
+		div(style="max-width:100px; max-height: 100px")
+			#{locals.qrImg}

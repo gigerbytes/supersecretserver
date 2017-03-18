@@ -4,27 +4,16 @@ var passport = require('passport');
 var Auth0Strategy = require('passport-auth0');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 
 var messages = require("controllers/messages");
 
-var app = express();
-app.set('view engine', 'pug')
-
-// Setups
+// settings
 var port = process.env.PORT || 3000;
 var db = process.env.MONGODB_URI || "mongodb://heroku_14r5fjjv:cspbhrn9cceku0ss1k7t758evs@ds133260.mlab.com:33260/heroku_14r5fjjv";
 mongoose.connect(db);
 callbackURL = process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/callback';
-
-//read post requests
-app.use( bodyParser.json() );       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
-}));
-
-
-// ############################
-// Auth0
 // Configure Passport to use Auth0
 var strategy = new Auth0Strategy({
     domain:       process.env.AUTH0_DOMAIN,
@@ -37,7 +26,26 @@ var strategy = new Auth0Strategy({
     // profile has all the information from the user
     return done(null, profile);
   });
+
+
+// express settings
+var app = express();
+app.set('view engine', 'pug')
+//read post requests
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
+app.use(cookieParser());
+app.use(session({
+  secret: 'shhhhhhhhh',
+  resave: true,
+  saveUninitialized: true
+}));
 passport.use(strategy);
+app.use(passport.initialize());
+app.use(passport.session());
+
 // This can be used to keep a smaller payload
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -45,11 +53,9 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
   done(null, user);
 });
-app.use(passport.initialize());
-app.use(passport.session());
 
-// ############################
-// App - routes
+
+// routes
 // home
 app.get('/', messages.index);
 
@@ -60,13 +66,9 @@ app.get('/messages/show/:id', messages.show);
 app.get('/messages/list', messages.list);
 app.get('/messages/image/:id', messages.image);
 
-
-// ############################
-// Auth0 - users
 // Render the login template
 app.get('/login',
   function(req, res){
-    console.log(callbackURL)
     res.render('login', { env: process.env, callbackURL: callbackURL });
   });
 
@@ -74,7 +76,6 @@ app.get('/login',
 app.get('/callback',
   passport.authenticate('auth0', { failureRedirect: '/' }),
   function(req, res) {
-    console.log('authenticated')
     res.redirect(req.session.returnTo || '/user');
   });
 
@@ -90,6 +91,7 @@ app.get('/user', ensureLoggedIn, function(req, res, next) {
 });
 
 
+// start server
 app.listen(port, function () {
   console.log('Listening on port 3000!');
 });

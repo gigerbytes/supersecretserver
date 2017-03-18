@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var messageSchema = new Schema({ 
+var messageSchema = mongoose.model({ 
 	recepientId: String,
 	messageBody: String,
 	qrCode: String,

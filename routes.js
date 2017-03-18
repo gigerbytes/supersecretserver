@@ -13,6 +13,8 @@ router.get('/', function (req, res) {
 
 router.get('/messages/new', messages.new);
 router.post('/messages/create', messages.create);
+router.get('/messages/show/:id', messages.show);
+router.get('/messages/list', messages.list);
 
 // Auth0
 // Render the login template

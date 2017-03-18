@@ -7,11 +7,14 @@ block content
   script.
     // Construct an instance of Auth0Lock with your clientId and aut0 domain name
     var lock = new Auth0Lock('#{env.AUTH0_CLIENT_ID}', '#{env.AUTH0_DOMAIN}',{ auth: {
-          redirectUrl: '#{env.AUTH0_CALLBACK_URL}'
+          redirectUrl: '#{callbackURL}'
         , responseType: 'code'
         , params: {
           scope: 'openid name email picture'
         }
+      },
+      languageDictionary: {
+        title: "SuperSecret"
       }});
 
     // Show lock's login widget

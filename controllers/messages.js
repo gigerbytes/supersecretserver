@@ -23,6 +23,9 @@ var Message = mongoose.model('Message', messageSchema);
 // Image - Generate QR Code
 // Show - Shows message
 
+exports.configure = function (req, res){
+	res.response
+}
 
 exports.create = function( req, res ) {
 	Message.create({

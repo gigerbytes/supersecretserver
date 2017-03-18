@@ -1,5 +1,5 @@
 var Message = require('../models/Message');
-var QRCode = require('qrcode')
+var qrCode = require('qr-image')
 
 
 exports.new = function( req, res ) {
@@ -10,16 +10,17 @@ exports.create = function( req, res ) {
 	//welcome to callback hell
 	Message.create({ recepientId: req.body.recipient, messageBody: req.body.message }, function (err, message) {
 	  if (err) res.status(500).send('Something broke!' + err);
-
-		var baseurl = 'https://supersecretserver.herokuapp.com'
-		// var baseurl = 'localhost:3000'
-		var uri = '/messages/show/'+ message._id;
-
-		var wholeUrl = baseurl + uri;
-		QRCode.toDataURL(wholeUrl, function (err, qrCode) {
-			res.render("../views/show", {qrImg: qrCode});
-		});
+	  res.redirect('/messages/image/'+message._id)
 	})
+}
+
+exports.image = function(req, res) {
+	messageId = req.param('id');
+	var baseurl = (process.env.NODE_ENV == 'production' ? 'https://supersecretserver.herokuapp.com':'localhost:3000');
+		var wholeUrl = baseurl + '/messages/show/'+ messageId;
+		var qr_png = qrCode.image(wholeUrl, { type: 'png' });
+		res.set('Content-Type', 'image/png');
+		qr_png.pipe(res);
 }
 
 exports.show = function(req, res) {

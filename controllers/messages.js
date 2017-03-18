@@ -49,6 +49,21 @@ exports.image = function(req, res) {
 exports.show = function(req, res) {
 	// Authenticate user
 	// Send msg as json
+	console.log(req.body);
+	if(req.body.password == '1234'){
+		messageId = req.param('id');
+		Message.findById(messageId, function(err, message) {
+			if (err) res.status(500).send('Something broke!' + err);
+			res.json({'message': message.messageBody});
+		});
+	} else {
+		res.json({'message': 'Wrong Password, Try Again'});
+	}
+}
+
+exports.old_show = function(req, res) {
+	// Authenticate user
+	// Send msg as json
 	messageId = req.param('id');
 	Message.findById(messageId, function(err, message) {
 		if (err) res.status(500).send('Something broke!' + err);

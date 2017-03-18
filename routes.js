@@ -9,7 +9,6 @@ var messages = require("./controllers/messages");
 
 router.get('/', messages.index);
 
-
 router.get('/messages/new', messages.new);
 router.post('/messages/create', messages.create);
 router.get('/messages/show/:id', messages.show);

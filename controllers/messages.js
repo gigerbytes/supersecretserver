@@ -41,7 +41,6 @@ exports.image = function(req, res) {
 	var wholeUrl = baseurl + '/messages/show/'+ messageId;
 
 	var qr_png = qrCode.image(wholeUrl, { type: 'png' });
-
 	res.set('Content-Type', 'image/png');
 	qr_png.pipe(res);
 }

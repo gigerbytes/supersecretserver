@@ -1,4 +1,5 @@
 var express = require('express');
+var request = require("request");
 var mongoose = require('mongoose');
 var passport = require('passport');
 var Auth0Strategy = require('passport-auth0');
@@ -14,6 +15,7 @@ var port = process.env.PORT || 3000;
 var db = process.env.MONGODB_URI || "mongodb://heroku_14r5fjjv:cspbhrn9cceku0ss1k7t758evs@ds133260.mlab.com:33260/heroku_14r5fjjv";
 mongoose.connect(db);
 callbackURL = process.env.AUTH0_CALLBACK_URL || 'http://localhost:3000/callback';
+
 // Configure Passport to use Auth0
 var strategy = new Auth0Strategy({
     domain:       process.env.AUTH0_DOMAIN,
@@ -27,6 +29,20 @@ var strategy = new Auth0Strategy({
     return done(null, profile);
   });
 
+// var options = { method: 'POST',
+//   url: process.env.AUTH0_TEST_URL,
+//   headers: { 'content-type': 'application/json' },
+//   body: '{"client_id": process.env.AUTH0_TEST_CLIENT_ID, "client_secret": process.env.AUTH0_TEST_CLIENT_SECRET,"audience": process.env.AUTH0_TEST_AUDIENCE,"grant_type": process.env.AUTH0_TEST_GRANT_TYPE}' };
+
+var options = { method: 'POST',
+  url: 'https://app65248950.eu.auth0.com/oauth/token',
+  headers: { 'content-type': 'application/json' },
+  body: '{"client_id":"sKv7dm3RPhLYQBsbQ98bycAfIGpWkVcc","client_secret":"1pN01GLckukxBIymVlCxpYwMnkWfT21Xnj5FtAMOjjncOGPID9w2KWQi-NPiN3U7","audience":"https://app65248950.eu.auth0.com/api/v2/","grant_type":"client_credentials"}' };
+
+request(options, function (error, response, body) {
+  if (error) throw new Error(error);
+  auth0_test_access_token = body.access_token;
+});
 
 // express settings
 var app = express();

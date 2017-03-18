@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "source": "source .secrets",
-    "dev": "node-dev server.js"
+    "dev": "NODE_PATH=. bash ./scripts/start"
   },
   "repository": {
     "type": "git",

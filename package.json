@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "source": "source .secrets",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,7 +19,11 @@
   },
   "homepage": "https://github.com/gigerbytes/supersecret#readme",
   "dependencies": {
+    "connect-ensure-login": "^0.1.1",
     "express": "^4.15.2",
-    "mongoose": "^4.9.0"
+    "mongoose": "^4.9.0",
+    "passport": "^0.3.2",
+    "passport-auth0": "^0.6.0",
+    "pug": "^2.0.0-beta11"
   }
 }

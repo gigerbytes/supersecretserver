@@ -9,6 +9,7 @@ exports.new = function( req, res ) {
 exports.create = function( req, res ) {
 
 	// ...
-	console.log(req);
-	res.send(".");
+	console.log(req.body.message);
+	console.log(req.body.recipient);
+	res.send(req.body.message);
 }

@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var Auth0Strategy = require('passport-auth0');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
+var bodyParser = require('body-parser');
 
 var app = express();
 app.set('view engine', 'pug')
@@ -11,6 +12,13 @@ var port = process.env.PORT || 3000;
 var db = process.env.MONGODB_URI || "mongodb://heroku_14r5fjjv:cspbhrn9cceku0ss1k7t758evs@ds133260.mlab.com:33260/heroku_14r5fjjv";
 mongoose.connect(db);
 
+//read post requests
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
+// app.use(express.json());       // to support JSON-encoded bodies
+// app.use(express.urlencoded()); // to support URL-encoded bodies
 
 // Configure Passport to use Auth0
 var strategy = new Auth0Strategy({

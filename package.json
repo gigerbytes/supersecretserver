@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "source": "source .secrets",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node-dev server.js"
   },
   "repository": {
     "type": "git",
@@ -21,10 +21,13 @@
   "dependencies": {
     "connect-ensure-login": "^0.1.1",
     "express": "^4.15.2",
+    "forms": "^1.3.0",
+    "mongoose": "^4.9.0",
     "passport": "^0.3.2",
     "passport-auth0": "^0.6.0",
-    "pug": "^2.0.0-beta11",
-    "forms": "^1.3.0",
-    "mongoose": "^4.9.0"
+    "pug": "^2.0.0-beta11"
+  },
+  "devDependencies":{
+    "node-dev": "^3.1.3"
   }
 }

@@ -2,6 +2,10 @@ var Message = require('../models/Message');
 var qrCode = require('qr-image')
 
 
+exports.index = function(req, res) {
+	res.render("../views/index");
+}
+
 exports.new = function( req, res ) {
 	res.render("../views/messages");
 }

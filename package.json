@@ -4,7 +4,7 @@
   "description": "@starthack",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "NODE_PATH=. node server.js",
     "source": "source .secrets",
     "dev": "NODE_PATH=. bash ./scripts/start"
   },

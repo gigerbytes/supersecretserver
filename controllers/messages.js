@@ -7,7 +7,7 @@ exports.new = function( req, res ) {
 }
 
 exports.create = function( req, res ) {
-	//welcome to callback hell 
+	//welcome to callback hell
 	Message.create({ recepientId: req.body.recipient, messageBody: req.body.message }, function (err, message) {
 	  if (err) res.status(500).send('Something broke!' + err);
 
@@ -23,7 +23,13 @@ exports.create = function( req, res ) {
 }
 
 exports.show = function(req, res) {
+	// Authenticate user
+	// Send msg as json
 	messageId = req.param('id');
+	Message.findById(messageId, function(err, message) {
+		if (err) res.status(500).send('Something broke!' + err);
+		res.send(message.messageBody);
+	});
 }
 
 exports.list = function( req, res ) {

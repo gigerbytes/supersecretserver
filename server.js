@@ -62,7 +62,8 @@ app.get('/', messages.index);
 // messages
 app.get('/messages/new', messages.new);
 app.post('/messages/create', messages.create);
-app.get('/messages/show/:id', messages.show);
+app.post('/messages/show/:id', messages.show);
+app.get('/messages/old_show/:id', messages.show);
 app.get('/messages/list', messages.list);
 app.get('/messages/image/:id', messages.image);
 

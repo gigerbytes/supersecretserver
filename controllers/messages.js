@@ -11,8 +11,8 @@ exports.create = function( req, res ) {
 	Message.create({ recepientId: req.body.recipient, messageBody: req.body.message }, function (err, message) {
 	  if (err) res.status(500).send('Something broke!' + err);
 
-		// var baseurl = 'https://supersecretserver.herokuapp.com'
-		var baseurl = 'localhost:3000'
+		var baseurl = 'https://supersecretserver.herokuapp.com'
+		// var baseurl = 'localhost:3000'
 		var uri = '/messages/show/'+ message._id;
 
 		var wholeUrl = baseurl + uri;

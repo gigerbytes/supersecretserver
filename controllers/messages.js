@@ -1,5 +1,26 @@
-var Message = require('../models/Message');
 var qrCode = require('qr-image')
+var mongoose = require('mongoose');
+
+var Schema = mongoose.Schema;
+
+// var userSchema = mongoose.Schema({ 
+// 	username: String,
+// 	passwdHash: String,
+// 	salt: String
+// });
+//
+// var User = mongoose.model("User", "userSchema")
+
+// Model
+var messageSchema = new Schema({
+	recepientId: String,
+	messageBody: String,
+	qrCode: String,
+	urlSlug: String,
+});
+
+Message = mongoose.model('Message', messageSchema);
+
 
 
 exports.index = function(req, res) {

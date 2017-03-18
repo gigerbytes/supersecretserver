@@ -35,6 +35,11 @@ exports.create = function( req, res ) {
 		})
 }
 
+exports.stone  = function( req, res ) {
+	message = req.param('id');
+	res.render("stone", {message: message});
+};
+
 exports.image = function(req, res) {
 	messageId = req.param('id');
 	var baseurl = (process.env.NODE_ENV == 'production' ? 'https://supersecretserver.herokuapp.com':'localhost:3000');

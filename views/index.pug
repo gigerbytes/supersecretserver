@@ -25,7 +25,7 @@ block content
         .col-lg-12
           form.form-horizontal#messageForm
             fieldset
-              legend Legend
+              legend Write a Legend
               .form-group
                 label.col-lg-2.control-label(for='inputEmail') Email
                 .col-lg-10
@@ -128,9 +128,8 @@ block scripts
       
       function showQrModal(response){
         imageURL = window.location.origin + "/messages/image/" + response
-        showURL = window.location.origin + "/messages/show/" + response
+        showURL = window.location.origin + "/messages/stone/" + response
         $('#qrModal .qrLink').attr("href", showURL).html(showURL)
-        console.log(imageURL)
         $('#qrModal .qrImage').attr("src", imageURL)
         
         $('#qrModal').modal('show');

@@ -2,24 +2,12 @@ var Message = require('../models/Message');
 var QRCode = require('qrcode')
 
 
-
-function generateQR(messageId, cb){
-
-}
-
-function renderQR(qrCode){
-	console.log(qrCode);
-	return qrCode;
-}
-
 exports.new = function( req, res ) {
-
 	res.render("../views/messages");
-
 }
 
 exports.create = function( req, res ) {
-
+	//welcome to callback hell 
 	Message.create({ recepientId: req.body.recipient, messageBody: req.body.message }, function (err, message) {
 	  if (err) res.status(500).send('Something broke!' + err);
 
@@ -40,8 +28,6 @@ exports.show = function(req, res) {
 
 exports.list = function( req, res ) {
 	Message.find({}, function(err, messages) {
-		// console.log(messages);
-		// if (err) res.status(500).send('Something broke!' + err);
 		res.send(`${messages}`);
 	})
 }

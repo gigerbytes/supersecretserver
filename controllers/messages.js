@@ -1,4 +1,16 @@
 var Message = require('../models/Message');
+var QRCode = require('qrcode')
+
+
+
+function generateQR(messageId, cb){
+
+}
+
+function renderQR(qrCode){
+	console.log(qrCode);
+	return qrCode;
+}
 
 exports.new = function( req, res ) {
 
@@ -7,9 +19,21 @@ exports.new = function( req, res ) {
 }
 
 exports.create = function( req, res ) {
-
 	// ...
 	console.log(req.body.message);
 	console.log(req.body.recipient);
-	res.send(req.body.message);
+	//save to DB logic
+
+	// var baseurl = 'https://supersecretserver.herokuapp.com'
+	var baseurl = 'localhost:3000'
+	var uri = '/messages/show/'+ req.body.recipient;
+
+	var wholeUrl = baseurl + uri;
+	QRCode.toDataURL(wholeUrl, function (err, qrCode) {
+		res.render("../views/show", {qrImg: qrCode});
+	});
+}
+
+exports.show = function(req, res) {
+	messageId = req.param('id');
 }

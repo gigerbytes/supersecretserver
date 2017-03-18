@@ -20,7 +20,7 @@ var Message = mongoose.model('Message', messageSchema);
 
 
 // Create - Creates a new message
-// Image -
+// Image - Generate QR Code
 // Show - Shows message
 
 
@@ -59,14 +59,4 @@ exports.show = function(req, res) {
 	} else {
 		res.json({'message': 'Wrong Password, Try Again'});
 	}
-}
-
-exports.old_show = function(req, res) {
-	// Authenticate user
-	// Send msg as json
-	messageId = req.param('id');
-	Message.findById(messageId, function(err, message) {
-		if (err) res.status(500).send('Something broke!' + err);
-		res.send(message.messageBody);
-	});
 }

@@ -59,6 +59,16 @@ passport.deserializeUser(function(user, done) {
 app.use( (req, res, done) => {
   res.locals.env = process.env
   res.locals.callbackURL = callbackURL
+
+  if (req.isAuthenticated()) {
+    res.locals.isAuthenticated = true
+    res.locals.user = req.user
+  }
+  else {
+    res.locals.isAuthenticated = false
+    res.locals.user = {}
+  }
+
   done()
 })
 
@@ -76,14 +86,14 @@ app.get('/messages/image/:id', messages.image);
 // Render the login template
 app.get('/login',
   function(req, res){
-    res.render('login', { env: process.env, callbackURL: callbackURL });
+    res.redirect("/?login=true")
   });
 
 // Perform the final stage of authentication and redirect to '/user'
 app.get('/callback',
-  passport.authenticate('auth0', { failureRedirect: '/' }),
+  passport.authenticate('auth0', { failureRedirect: '/?login=true' }),
   function(req, res) {
-    res.redirect(req.session.returnTo || '/user');
+    res.redirect(req.session.returnTo || '/');
   });
 
 // Perform session logout and redirect to homepage
@@ -94,7 +104,7 @@ app.get('/logout', function(req, res){
 
 // Get the user profile
 app.get('/user', ensureLoggedIn, function(req, res, next) {
-  res.render('user', { user: req.user });
+  res.render('user');
 });
 
 

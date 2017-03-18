@@ -47,17 +47,14 @@ request(options, function (error, response, body) {
 
 // ENCRYPTION HELPER
 var Schema = mongoose.Schema;
-
-
 var userSchema = new Schema({
  username: String,
  publicKey: String,
  privateKey: String
 });
-
 var User = mongoose.model("User", userSchema)
 
-//generate 
+//generate
 function generateUserKeys(userData){
   // query if user exists:
   var username = userData.displayName;

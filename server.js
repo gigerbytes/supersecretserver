@@ -31,6 +31,7 @@ var strategy = new Auth0Strategy({
 // express settings
 var app = express();
 app.set('view engine', 'pug')
+app.use(express.static('public'));
 //read post requests
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -54,16 +55,22 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
+ // Local helpers
+app.use( (req, res, done) => {
+  res.locals.env = process.env
+  res.locals.callbackURL = callbackURL
+  done()
+})
 
 // routes
 // home
-app.get('/', messages.index);
+app.get('/', function(req, res) {
+	res.render("index");
+});
 
 // messages
-app.get('/messages/new', messages.new);
 app.post('/messages/create', messages.create);
 app.get('/messages/show/:id', messages.show);
-app.get('/messages/list', messages.list);
 app.get('/messages/image/:id', messages.image);
 
 // Render the login template

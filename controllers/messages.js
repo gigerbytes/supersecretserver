@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
-// var userSchema = mongoose.Schema({ 
+// var userSchema = mongoose.Schema({
 // 	username: String,
 // 	passwdHash: String,
 // 	salt: String
@@ -15,37 +15,35 @@ var Schema = mongoose.Schema;
 var messageSchema = new Schema({
 	recepientId: String,
 	messageBody: String,
-	qrCode: String,
-	urlSlug: String,
 });
-
-Message = mongoose.model('Message', messageSchema);
-
+var Message = mongoose.model('Message', messageSchema);
 
 
-exports.index = function(req, res) {
-	res.render("../views/index");
-}
+// Create - Creates a new message
+// Image -
+// Show - Shows message
 
-exports.new = function( req, res ) {
-	res.render("../views/messages");
-}
 
 exports.create = function( req, res ) {
-	//welcome to callback hell
-	Message.create({ recepientId: req.body.recipient, messageBody: req.body.message }, function (err, message) {
-	  if (err) res.status(500).send('Something broke!' + err);
-	  res.redirect('/messages/image/'+message._id)
-	})
+	Message.create({
+		recepientId: req.body.recipient,
+		messageBody: req.body.message
+	},
+		function (err, message) {
+		  if (err) res.status(500).send('Something broke!' + err);
+		  res.send(message._id)
+		})
 }
 
 exports.image = function(req, res) {
 	messageId = req.param('id');
 	var baseurl = (process.env.NODE_ENV == 'production' ? 'https://supersecretserver.herokuapp.com':'localhost:3000');
-		var wholeUrl = baseurl + '/messages/show/'+ messageId;
-		var qr_png = qrCode.image(wholeUrl, { type: 'png' });
-		res.set('Content-Type', 'image/png');
-		qr_png.pipe(res);
+	var wholeUrl = baseurl + '/messages/show/'+ messageId;
+
+	var qr_png = qrCode.image(wholeUrl, { type: 'png' });
+
+	res.set('Content-Type', 'image/png');
+	qr_png.pipe(res);
 }
 
 exports.show = function(req, res) {
@@ -56,10 +54,4 @@ exports.show = function(req, res) {
 		if (err) res.status(500).send('Something broke!' + err);
 		res.send(message.messageBody);
 	});
-}
-
-exports.list = function( req, res ) {
-	Message.find({}, function(err, messages) {
-		res.send(`${messages}`);
-	})
 }

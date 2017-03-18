@@ -7,8 +7,9 @@ var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-
+var NodeRSA = require('node-rsa');
 var messages = require("controllers/messages");
+
 
 // settings
 var port = process.env.PORT || 3000;
@@ -44,6 +45,40 @@ request(options, function (error, response, body) {
   auth0_test_access_token = body.access_token;
 });
 
+// ENCRYPTION HELPER
+var Schema = mongoose.Schema;
+
+
+var userSchema = new Schema({
+ username: String,
+ publicKey: String,
+ privateKey: String
+});
+
+var User = mongoose.model("User", userSchema)
+
+//generate 
+function generateUserKeys(userData){
+  // query if user exists:
+  var username = userData.displayName;
+  User.count({"username": username}, function(err, count){
+    if(count == 0) { // no user, go generate a key pair
+
+      var key = new NodeRSA();
+      key.generateKeyPair();
+      var publicPem = key.exportKey('pkcs8-public-pem');
+      var privatePem = key.exportKey('pkcs8-private-pem');
+
+      User.create({
+        username: username,
+        publicKey: publicPem,
+        privateKey: privatePem
+      });
+    }
+
+  });
+}
+
 // express settings
 var app = express();
 app.set('view engine', 'pug')
@@ -75,9 +110,9 @@ passport.deserializeUser(function(user, done) {
 app.use( (req, res, done) => {
   res.locals.env = process.env
   res.locals.callbackURL = callbackURL
-
   if (req.isAuthenticated()) {
     res.locals.isAuthenticated = true
+    generateUserKeys(req.user);
     res.locals.user = req.user
   }
   else {
@@ -109,6 +144,7 @@ app.get('/login',
 app.get('/callback',
   passport.authenticate('auth0', { failureRedirect: '/?login=true' }),
   function(req, res) {
+
     res.redirect(req.session.returnTo || '/');
   });
 
@@ -122,6 +158,10 @@ app.get('/logout', function(req, res){
 app.get('/user', ensureLoggedIn, function(req, res, next) {
   res.render('user');
 });
+
+
+//to: refactor (?)
+app.get('/user/configure', messages.configure);
 
 
 // start server

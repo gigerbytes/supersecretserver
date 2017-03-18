@@ -1,0 +1,23 @@
+{
+  "name": "supersecret",
+  "version": "1.0.0",
+  "description": "@starthack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gigerbytes/supersecret.git"
+  },
+  "author": "gigerbytes, pa1nd",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gigerbytes/supersecret/issues"
+  },
+  "homepage": "https://github.com/gigerbytes/supersecret#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "mongoose": "^4.9.0"
+  }
+}

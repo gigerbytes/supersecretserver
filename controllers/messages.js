@@ -1,17 +1,8 @@
 var qrCode = require('qr-image')
 var mongoose = require('mongoose');
+var User = require('../models/User');
 
 var Schema = mongoose.Schema;
-
-// var userSchema = mongoose.Schema({
-// 	username: String,
-// 	passwdHash: String,
-// 	salt: String
-// });
-//
-// var User = mongoose.model("User", "userSchema")
-
-// Model
 var messageSchema = new Schema({
 	recepientId: String,
 	messageBody: String,
@@ -24,7 +15,16 @@ var Message = mongoose.model('Message', messageSchema);
 // Show - Shows message
 
 exports.configure = function (req, res){
-	res.response
+	var username = res.locals.user.displayName;
+	User.find({"username": username}, function(err, user){
+		user = user[0];
+		console.log(user);
+		var privateKey = user.privateKey;
+		console.log(privateKey);
+		var qr_privkey = qrCode.image(privateKey, { type: 'png' });
+		res.set('Content-Type', 'image/png');
+		qr_privkey.pipe(res);
+	});
 }
 
 exports.create = function( req, res ) {

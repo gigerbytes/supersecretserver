@@ -1,6 +1,6 @@
 var express = require('express');
-var request = require("request");
 var mongoose = require('mongoose');
+var request = require("request");
 var passport = require('passport');
 var Auth0Strategy = require('passport-auth0');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
@@ -9,6 +9,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var NodeRSA = require('node-rsa');
 var messages = require("controllers/messages");
+var User = require("models/User");
 
 
 // settings
@@ -46,14 +47,6 @@ request(options, function (error, response, body) {
 });
 
 // ENCRYPTION HELPER
-var Schema = mongoose.Schema;
-var userSchema = new Schema({
- username: String,
- publicKey: String,
- privateKey: String
-});
-var User = mongoose.model("User", userSchema)
-
 //generate
 function generateUserKeys(userData){
   // query if user exists:

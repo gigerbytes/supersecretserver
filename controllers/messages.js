@@ -4,8 +4,8 @@ var User = require('../models/User');
 
 var Schema = mongoose.Schema;
 var messageSchema = new Schema({
-	recepientId: String,
-	messageBody: String,
+	recipientId: String,
+	messageBody: String
 });
 var Message = mongoose.model('Message', messageSchema);
 
@@ -28,8 +28,10 @@ exports.configure = function (req, res){
 }
 
 exports.create = function( req, res ) {
+	console.log('req.body')
+	console.log(req.body)
 	Message.create({
-		recepientId: req.body.recipient,
+		recipientId: req.body.recipient,
 		messageBody: req.body.message
 	},
 		function (err, message) {

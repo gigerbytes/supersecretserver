@@ -56,8 +56,9 @@ exports.image = function(req, res) {
 exports.show = function(req, res) {
 	// Authenticate user
 	// Send msg as json
-	console.log(req.body);
-	if(req.body.password == '1234'){
+	var body = JSON.parse(req.body);
+	console.log(body);
+	if(body.password == '1234'){
 		messageId = req.param('id');
 		Message.findById(messageId, function(err, message) {
 			if (err) res.status(500).send('Something broke!' + err);
@@ -66,4 +67,5 @@ exports.show = function(req, res) {
 	} else {
 		res.json({'message': 'Wrong Password, Try Again'});
 	}
+	console.log('end')
 }

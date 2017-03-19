@@ -1,4 +1,5 @@
 var qrCode = require('qr-image')
+var NodeRSA = require('node-rsa');
 var mongoose = require('mongoose');
 var User = require('../models/User');
 
@@ -18,9 +19,9 @@ exports.configure = function (req, res){
 	var username = res.locals.user.displayName;
 	User.find({"username": username}, function(err, user){
 		user = user[0];
-		console.log(user);
+		// console.log(user);
 		var privateKey = user.privateKey;
-		console.log(privateKey);
+		// console.log(privateKey);
 		var qr_privkey = qrCode.image(privateKey, { type: 'png' });
 		res.set('Content-Type', 'image/png');
 		qr_privkey.pipe(res);
@@ -28,14 +29,29 @@ exports.configure = function (req, res){
 }
 
 exports.create = function( req, res ) {
+	// encryption module:
+	console.log(req.body);
+	var recipient = req.body.recipient;
+	User.find({"username": recipient}, function(err, user){
+		user = user[0];
+		var publicKey = new NodeRSA();
+		publicKey.importKey(user.publicKey, 'pkcs8-public-pem');
+
+
+		console.log(publicKey);	
+		console.log(req.body.message);
+		var encryptedMessage = publicKey.encrypt(req.body.message, "utf8");
+	});
+
+
 	Message.create({
-		recepientId: req.body.recipient,
+		recepientId: recipient,
 		messageBody: req.body.message
 	},
-		function (err, message) {
-		  if (err) res.status(500).send('Something broke!' + err);
-		  res.send(message._id)
-		})
+	function (err, message) {
+	  if (err) res.status(500).send('Something broke!' + err);
+	  res.send(message._id)
+	})
 }
 
 exports.stone  = function( req, res ) {

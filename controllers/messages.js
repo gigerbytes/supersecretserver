@@ -61,11 +61,14 @@ exports.show = function(req, res) {
 	console.log(req.body);
 	if(req.body.password == '1234'){
 		messageId = req.param('id');
+		console.log(messageId);
 		Message.findById(messageId, function(err, message) {
+			console.log(message);
 			if (err) res.status(500).send('Something broke!' + err);
 			res.json({'message': message.messageBody});
 		});
 	} else {
+		console.log("else");
 		res.json({'message': 'Wrong Password, Try Again'});
 	}
 	console.log('end')

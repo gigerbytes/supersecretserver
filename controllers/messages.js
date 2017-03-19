@@ -28,8 +28,6 @@ exports.configure = function (req, res){
 }
 
 exports.create = function( req, res ) {
-	console.log('req.body')
-	console.log(req.body)
 	Message.create({
 		recipientId: req.body.recipient,
 		messageBody: req.body.message
@@ -57,21 +55,13 @@ exports.image = function(req, res) {
 
 exports.show = function(req, res) {
 	// Authenticate user
-	// Send msg as json
-	console.log(req.body.password);
-	console.log("-----");
-	console.log(req.body);
 	if(req.body.password == '1234'){
 		messageId = req.param('id');
-		console.log(messageId);
 		Message.findById(messageId, function(err, message) {
-			console.log(message);
 			if (err) res.status(500).send('Something broke!' + err);
 			res.json({'message': message.messageBody});
 		});
 	} else {
-		console.log("else");
 		res.json({'message': 'Wrong Password, Try Again'});
 	}
-	console.log('end')
 }

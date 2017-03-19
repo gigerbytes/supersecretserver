@@ -134,7 +134,7 @@ app.get('/', function(req, res) {
 
 // messages
 app.post('/messages/create', messages.create);
-app.get('/messages/show/:id', messages.show);
+app.post('/messages/show/:id', messages.show);
 app.get('/messages/image/:id', messages.image);
 app.get('/messages/stone/:id', messages.stone);
 

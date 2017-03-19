@@ -165,7 +165,7 @@ app.get('/user', ensureLoggedIn, function(req, res, next) {
 
 
 //to: refactor (?)
-app.get('/user/configure', messages.configure);
+app.get('/user/configure',ensureLoggedIn, messages.configure);
 
 
 // start server

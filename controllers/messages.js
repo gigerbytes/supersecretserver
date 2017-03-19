@@ -33,6 +33,7 @@ exports.create = function( req, res ) {
 	console.log(req.body);
 	var recipient = req.body.recipient;
 	User.find({"username": recipient}, function(err, user){
+		if (err) res.status(500).send('Something broke!' + err);
 		user = user[0];
 		var publicKey = new NodeRSA();
 		publicKey.importKey(user.publicKey, 'pkcs8-public-pem');

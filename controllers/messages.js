@@ -30,7 +30,6 @@ exports.configure = function (req, res){
 
 exports.create = function( req, res ) {
 	// encryption module:
-	console.log(req.body);
 	var recipient = req.body.recipient;
 	User.find({"username": recipient}, function(err, user){
 		if (err) res.status(500).send('Something broke!' + err);
@@ -38,24 +37,18 @@ exports.create = function( req, res ) {
 		var publicKey = new NodeRSA();
 		publicKey.importKey(user.publicKey, 'pkcs8-public-pem');
 
-		console.log(publicKey);	
-		console.log(req.body.message);
 		var encryptedMessage = publicKey.encrypt(req.body.message, "base64");
-		console.log(encryptedMessage);
 
 		Message.create({
 			recipientId: req.body.recipient,
-			messageBody: encryptedMessage
-			// messageBody: req.body.message
+			// messageBody: encryptedMessage
+			messageBody: req.body.message
 		},
 		function (err, message) {
 		  if (err) res.status(500).send('Something broke!' + err);
 		  res.send(message._id)
 		})
-	});
-
-
-	
+	});	
 }
 
 exports.stone  = function( req, res ) {

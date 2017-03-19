@@ -5,8 +5,8 @@ var User = require('../models/User');
 
 var Schema = mongoose.Schema;
 var messageSchema = new Schema({
-	recepientId: String,
-	messageBody: String,
+	recipientId: String,
+	messageBody: String
 });
 var Message = mongoose.model('Message', messageSchema);
 
@@ -45,7 +45,7 @@ exports.create = function( req, res ) {
 
 
 	Message.create({
-		recepientId: recipient,
+		recipientId: req.body.recipient,
 		messageBody: req.body.message
 	},
 	function (err, message) {
@@ -71,8 +71,6 @@ exports.image = function(req, res) {
 
 exports.show = function(req, res) {
 	// Authenticate user
-	// Send msg as json
-	console.log(req.body);
 	if(req.body.password == '1234'){
 		messageId = req.param('id');
 		Message.findById(messageId, function(err, message) {

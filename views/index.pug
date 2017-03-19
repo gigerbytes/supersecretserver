@@ -52,8 +52,11 @@ block content
       span.help-block
         | Click on a user to send a message. No need to login for that.
       .list-group(style=' max-height: 600px; overflow: scroll;')
-        each i in [1,2,3,4,5,4,5,6,7,8,9,4,4,4,4,4,4,4,2,2,2,2,2,2,2,22,2,2,3]
-          a.list-group-item.contact(href='#') Hans
+        each user in users
+          a.list-group-item.contact(href='#' data-email=user.email style='padding: 9px 9px;')
+            // name, email, picture
+            img(src=user.picture style='max-width:32px; margin-right: 8px;')
+            | #{user.name}
               
 block modal
   .modal#qrModal
@@ -95,7 +98,10 @@ block modal
 block scripts
   script.
     $( ".contact" ).click(function(e) {
-      $('#inputEmail').val($(e.target).html());
+      $('#inputEmail').val(
+        $(e.target).data('email')
+      );
+      e.preventDefault();
       $('#textArea').focus();
     });
 

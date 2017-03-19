@@ -107,6 +107,7 @@ passport.deserializeUser(function(user, done) {
 app.use( (req, res, done) => {
   res.locals.env = process.env
   res.locals.callbackURL = callbackURL
+
   if (req.isAuthenticated()) {
     res.locals.isAuthenticated = true
     generateUserKeys(req.user);
@@ -123,7 +124,19 @@ app.use( (req, res, done) => {
 // routes
 // home
 app.get('/', function(req, res) {
-	res.render("index");
+
+  var options = { method: 'GET',
+    url: 'https://app65248950.eu.auth0.com/api/v2/users',
+    headers: { authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik1FRTVNVGhFTnpFM01rVXpPVE5DUXpRM1JqVTFSamt3UkRkRVJFWXdOa1ZCUkRJNVJVTTRPQSJ9.eyJpc3MiOiJodHRwczovL2FwcDY1MjQ4OTUwLmV1LmF1dGgwLmNvbS8iLCJzdWIiOiJzS3Y3ZG0zUlBoTFlRQnNiUTk4YnljQWZJR3BXa1ZjY0BjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9hcHA2NTI0ODk1MC5ldS5hdXRoMC5jb20vYXBpL3YyLyIsImV4cCI6MTQ4OTk2NTQxMiwiaWF0IjoxNDg5ODc5MDEyLCJzY29wZSI6InJlYWQ6Y2xpZW50X2dyYW50cyBjcmVhdGU6Y2xpZW50X2dyYW50cyBkZWxldGU6Y2xpZW50X2dyYW50cyB1cGRhdGU6Y2xpZW50X2dyYW50cyByZWFkOnVzZXJzIHVwZGF0ZTp1c2VycyBkZWxldGU6dXNlcnMgY3JlYXRlOnVzZXJzIHJlYWQ6dXNlcnNfYXBwX21ldGFkYXRhIHVwZGF0ZTp1c2Vyc19hcHBfbWV0YWRhdGEgZGVsZXRlOnVzZXJzX2FwcF9tZXRhZGF0YSBjcmVhdGU6dXNlcnNfYXBwX21ldGFkYXRhIGNyZWF0ZTp1c2VyX3RpY2tldHMgcmVhZDpjbGllbnRzIHVwZGF0ZTpjbGllbnRzIGRlbGV0ZTpjbGllbnRzIGNyZWF0ZTpjbGllbnRzIHJlYWQ6Y2xpZW50X2tleXMgdXBkYXRlOmNsaWVudF9rZXlzIGRlbGV0ZTpjbGllbnRfa2V5cyBjcmVhdGU6Y2xpZW50X2tleXMgcmVhZDpjb25uZWN0aW9ucyB1cGRhdGU6Y29ubmVjdGlvbnMgZGVsZXRlOmNvbm5lY3Rpb25zIGNyZWF0ZTpjb25uZWN0aW9ucyByZWFkOnJlc291cmNlX3NlcnZlcnMgdXBkYXRlOnJlc291cmNlX3NlcnZlcnMgZGVsZXRlOnJlc291cmNlX3NlcnZlcnMgY3JlYXRlOnJlc291cmNlX3NlcnZlcnMgcmVhZDpkZXZpY2VfY3JlZGVudGlhbHMgdXBkYXRlOmRldmljZV9jcmVkZW50aWFscyBkZWxldGU6ZGV2aWNlX2NyZWRlbnRpYWxzIGNyZWF0ZTpkZXZpY2VfY3JlZGVudGlhbHMgcmVhZDpydWxlcyB1cGRhdGU6cnVsZXMgZGVsZXRlOnJ1bGVzIGNyZWF0ZTpydWxlcyByZWFkOmVtYWlsX3Byb3ZpZGVyIHVwZGF0ZTplbWFpbF9wcm92aWRlciBkZWxldGU6ZW1haWxfcHJvdmlkZXIgY3JlYXRlOmVtYWlsX3Byb3ZpZGVyIGJsYWNrbGlzdDp0b2tlbnMgcmVhZDpzdGF0cyByZWFkOnRlbmFudF9zZXR0aW5ncyB1cGRhdGU6dGVuYW50X3NldHRpbmdzIHJlYWQ6bG9ncyByZWFkOnNoaWVsZHMgY3JlYXRlOnNoaWVsZHMgZGVsZXRlOnNoaWVsZHMgcmVhZDpncmFudHMgZGVsZXRlOmdyYW50cyByZWFkOmd1YXJkaWFuX2ZhY3RvcnMgdXBkYXRlOmd1YXJkaWFuX2ZhY3RvcnMgcmVhZDpndWFyZGlhbl9lbnJvbGxtZW50cyBkZWxldGU6Z3VhcmRpYW5fZW5yb2xsbWVudHMgY3JlYXRlOmd1YXJkaWFuX2Vucm9sbG1lbnRfdGlja2V0cyByZWFkOnVzZXJfaWRwX3Rva2VucyJ9.a3YGhNPFy6Dd-_qPkEItSKDu6j7soS2fy-Ux4I3o8y290TgZ2cuYN5KixIkay0HSP73qLZ2BY3m9see1cDDbzftQZBUeEZa4uqBLDvF3e8tqoR5a6Yk4vJYcBfcpD7xD0nwwBOWqjQ7-fzLixzTmWrEnx8WUtGskWVLgzl_G-Wf8IHyoDrk0h4QFCBnUhYxdD6owTMRd0aI_IL-F_MghWRIbkivGi4IpQeu68TLddBo_KXJwUQoVlhOsMhY_kwMIa6t9kIFGGSvlrQYNuzJUTZwIp-gi0TN6VEgY1cwD2T2wy0Lc_l4jurws9OhsXnXMOdBTp6MlE6Zwt5LcqnUcrg' } };
+
+  request(options, function (error, response, users) {
+    if (error) throw new Error(error);
+
+    // name, email, picture
+    res.render("index", {users: JSON.parse(users)});
+  });
+
+
 });
 
 // messages
